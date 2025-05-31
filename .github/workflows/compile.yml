@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/Immortalwrt/relevance/start'
+      - 'buconfig'
 
 env:
   GIT_REPOSITORY: ${{github.repository}}
@@ -30,22 +30,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-       target: [Immortalwrt]
+       target: [Lede]
 
     steps:
     - name: 释放Ubuntu磁盘空间
-      uses: jlumbroso/free-disk-space@main
+      uses: danshui-git/free-disk-space@main
       with:
-        # this might remove tools that are actually needed,
-        # if set to "true" but frees about 6 GB
-        tool-cache: true
-        # all of these default to true, but feel free to set to
-        # "false" if necessary for your workflow
-        android: true
-        dotnet: true
-        haskell: true
-        large-packages: true
-        swap-storage: true
+        remove_android: true
+        remove_dotnet: true
+        remove_haskell: true
+        remove_tool_cache: true
+        remove_swap: true
+        remove_docker_image: true
+        remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+        remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/share/glade* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell"
         
     - name: 准备结束
       uses: actions/checkout@v4
@@ -115,6 +113,7 @@ jobs:
         bash ${{ env.COMMON_SH }} Diy_firmware
 
     - name: 发送[在线更新固件]至云端
+      continue-on-error: true
       if: steps.compile.outcome == 'success' && env.UPDATE_FIRMWARE_ONLINE == 'true'
       uses: 281677160/common@cloud
         

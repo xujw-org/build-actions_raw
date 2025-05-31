@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - 'build/Lede/relevance/start'
+      - 'build/Immortalwrt/relevance/start'
 
 env:
   GIT_REPOSITORY: ${{github.repository}}
@@ -30,15 +30,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-          target: [Lede]
+       target: [Immortalwrt]
 
-    steps:    
-    - name: 准备结束
-      uses: actions/checkout@v4
-
-    - name: 检测密匙/文件/版本
-      uses: 281677160/common@mishi
-
+    steps:
     - name: 释放Ubuntu磁盘空间
       uses: jlumbroso/free-disk-space@main
       with:
@@ -52,6 +46,12 @@ jobs:
         haskell: true
         large-packages: true
         swap-storage: true
+        
+    - name: 准备结束
+      uses: actions/checkout@v4
+
+    - name: 检测密匙/文件/版本
+      uses: 281677160/common@mishi
         
     - name: 部署编译环境
       env:
