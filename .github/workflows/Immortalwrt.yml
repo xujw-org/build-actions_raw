@@ -135,7 +135,10 @@ jobs:
     - name: 运行其他和SSH远程(make menuconfig)
       id: info
       uses: 281677160/common@need
-        
+      
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      
     - name: 编译信息
       continue-on-error: true
       if: env.COMPILATION_INFORMATION == 'true'
